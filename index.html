@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>NOAA GOES NA Recent</title>
+    <style>
+      body {
+        margin: 0;
+      }
+
+      .container {
+        width: 720px;
+        margin: 0 auto;
+        padding-top: 32px;
+      }
+
+      .controls {
+      }
+
+      .controls a {
+        color: black;
+        background-color: lightgray;
+        padding: 2px 8px 0;
+      }
+
+      .controls a.selected {
+        background-color: darkgrey;
+        font-weight: bold;
+      }
+
+      span.animate {
+        float: right;
+      }
+
+      img {
+        display: none;
+        width: 720px;
+      }
+
+      div[pictures] {
+        position: relative;
+      }
+
+      div[pictures] img {
+        position: absolute;
+        top: 0;
+      }
+    </style>
+    <style id="selected"></style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="controls">
+        <span class="image">
+          <a href="#" onClick="select('rb')">Rainbow IR</a>
+          <a href="#" onClick="select('wv')">Water Vapor</a>
+          <a href="#" onClick="select('radar')">Radar</a>
+        </span>
+        <span class="animate">
+          <a href="#" onClick="toggleAnimated()">Animated</a>
+        </span>
+      </div>
+      <div pictures>
+        <img wv src="http://www.ssd.noaa.gov/goes/comp/nhem/wv.jpg" /><br />
+        <img rb src="http://www.ssd.noaa.gov/goes/comp/nhem/rb.jpg" /><br />
+        <img radar src="http://radar.weather.gov/Conus/RadarImg/latest_Small.gif" /><br />
+        <img wvanimated src="http://www.ssd.noaa.gov/goes/comp/nhem/wv-animated.gif" /><br />
+        <img rbanimated src="http://www.ssd.noaa.gov/goes/comp/nhem/rb-animated.gif" /><br />
+        <img radaranimated src="http://radar.weather.gov/Conus/Loop/NatLoop_Small.gif" /><br />
+      </div>
+    </div>
+  </body>
+  <script>
+    let selected = "wv";
+    function select(type) {
+      selected = type;
+      update();
+    }
+
+    let animated = false;
+    const animateSelector = "[onClick='toggleAnimated()']";
+    const animateButton = document.querySelector(animateSelector);
+    function toggleAnimated() {
+      animated = !animated;
+      animateButton.innerText = animated ? "Static" : "Animated";
+      update();
+    }
+
+    const stylesheet = document.getElementById('selected');
+    function update() {
+      stylesheet.innerText = `img[${selected}${animated ? 'animated' : ''}] { display: block; }`;
+      Array.from(document.getElementsByTagName('a')).forEach((_) => {
+        _.classList.remove('selected');
+      });
+      document.querySelector(`a[onClick="select('${selected}')"]`).classList.add('selected');
+    }
+
+    update();
+
+    function reload() {
+      document.getElementsByTagName('img').forEach((_) => {
+        _.src = _.src;
+      });
+    }
+
+    // NOAA updates every 15 minutes or so.
+    setInterval(reload, 1000 * 60 * 15);
+  </script>
+</html>
