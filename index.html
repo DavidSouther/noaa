@@ -44,6 +44,16 @@
         position: absolute;
         top: 0;
       }
+
+      .about {
+        position: fixed;
+        text-align: center;
+        bottom: 0;
+        width: 720px;
+        margin-left: -360px;
+        background-color: white;
+        left: 50%;
+      }
     </style>
     <style id="selected"></style>
   </head>
@@ -69,6 +79,8 @@
       </div>
     </div>
   </body>
+  <p class="about">Consolidated views of the latest weather. Because whee! <a href="https://github.com/davidsouther/noaa">Fork n'at.</a></p>
+
   <script>
     let selected = "wv";
     function select(type) {
